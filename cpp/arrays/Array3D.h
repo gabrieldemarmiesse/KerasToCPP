@@ -11,7 +11,7 @@
 class Array3D : public MultiDimArray {
     public:
     explicit Array3D(int dim0, int dim1, int dim2, bool init=true);
-    int shape[1];
+    int shape[3];
     double access(int dim0, int dim1, int dim2);
 };
 

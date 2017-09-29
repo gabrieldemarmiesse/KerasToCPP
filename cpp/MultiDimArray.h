@@ -16,7 +16,7 @@ class MultiDimArray {
     std::vector<double> values;
 
     protected:
-    void initialize();
+    void initialize(bool init);
     void initSize(const int *shape);
 
 };

@@ -10,8 +10,7 @@ Array3D::Array3D(int dim0, int dim1, int dim2, bool init) {
     shape[2] = dim2;
     nbDims = 3;
     initSize(shape);
-    if(init)
-        initialize();
+    initialize(init);
 }
 
 double Array3D::access(int dim0, int dim1, int dim2) {

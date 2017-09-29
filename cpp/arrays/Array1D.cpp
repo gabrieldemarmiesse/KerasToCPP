@@ -8,8 +8,7 @@ Array1D::Array1D(int dim0, bool init) {
     shape[0] = dim0;
     nbDims = 1;
     initSize(shape);
-    if(init)
-        initialize();
+    initialize(init);
 }
 
 double Array1D::access(int dim0) {

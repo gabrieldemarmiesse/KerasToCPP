@@ -9,8 +9,7 @@ Array2D::Array2D(int dim0, int dim1, bool init) {
     shape[1] = dim1;
     nbDims = 2;
     initSize(shape);
-    if(init)
-        initialize();
+    initialize(init);
 }
 
 double Array2D::access(int dim0, int dim1) {

@@ -11,8 +11,7 @@ Array4D::Array4D(int dim0, int dim1, int dim2, int dim3, bool init) {
     shape[3] = dim3;
     nbDims = 4;
     initSize(shape);
-    if(init)
-        initialize();
+    initialize(init);
 }
 
 double Array4D::access(int dim0, int dim1, int dim2, int dim3) {
