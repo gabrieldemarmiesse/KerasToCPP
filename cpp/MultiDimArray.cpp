@@ -18,18 +18,18 @@ MultiDimArray::MultiDimArray(std::vector<int> dims) {
 
 }
 
-double MultiDimArray::get(int dim0) {
-    return values[dim0];
+double* MultiDimArray::get(int dim0) {
+    return &(values[dim0]);
 }
 
-double MultiDimArray::get(int dim0, int dim1) {
-    return values[dim0*shape[1] + dim1];
+double* MultiDimArray::get(int dim0, int dim1) {
+    return &(values[dim0*shape[1] + dim1]);
 }
 
-double MultiDimArray::get(int dim0, int dim1, int dim2) {
-    return values[dim2 + shape[2]*(dim1 + shape[1]*dim0)];
+double* MultiDimArray::get(int dim0, int dim1, int dim2) {
+    return &(values[dim2 + shape[2]*(dim1 + shape[1]*dim0)]);
 }
 
-double MultiDimArray::get(int dim0, int dim1, int dim2, int dim3) {
-    return values[dim3 + shape[3]*(dim2 + shape[2]*(dim1 + shape[1]*dim0))];
+double* MultiDimArray::get(int dim0, int dim1, int dim2, int dim3) {
+    return &(values[dim3 + shape[3]*(dim2 + shape[2]*(dim1 + shape[1]*dim0))]);
 }

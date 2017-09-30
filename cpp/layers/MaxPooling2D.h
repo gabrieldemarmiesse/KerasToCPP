@@ -9,7 +9,11 @@
 #include "../Layer.h"
 
 class MaxPooling2D : public Layer{
-
+public:
+    void call(MultiDimArray *in, MultiDimArray *out) override;
+    std::vector<int> getOutputShapeFor(std::vector<int>* inputShape) override;
+    int poolSizeH;
+    int poolSizeW;
 };
 
 
