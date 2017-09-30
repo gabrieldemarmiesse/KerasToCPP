@@ -37,10 +37,10 @@ std::vector<int> MaxPooling2D::getOutputShapeFor(std::vector<int> *inputShape) {
 void MaxPooling2D::call(MultiDimArray *in, MultiDimArray *out) {
 
     for(int i=0; i<out->shape[0]; i++){
-        for(int j=0; j<out->shape[1]; i++){
-            for(int k=0; k<out->shape[2];i++){
+        for(int j=0; j<out->shape[1]; j++){
+            for(int k=0; k<out->shape[2];k++){
 
-                double maximum = std::numeric_limits<double>::min();
+                float maximum = std::numeric_limits<float>::min();
 
                 for(int l=0; l<poolSizeH; l++){
                     for(int m=0; m<poolSizeW; m++){

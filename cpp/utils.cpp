@@ -6,21 +6,19 @@
 #include <vector>
 #include <c++/fstream>
 #include <c++/cassert>
-
-using namespace std;
+#include "utils.h"
 
 template <class myType>
-void fillArray(ifstream *file, vector<myType>* pointer){
+void fillArray(std::ifstream *file, std::vector<myType>* pointer){
 
     unsigned long long toRead = pointer->size() * sizeof(myType);
     file->read((char *) &(pointer->data()), toRead);
 }
 
-string getActivation(ifstream *file){
+std::string getActivation(std::ifstream *file){
     unsigned int flag;
     file->read((char *) &flag,sizeof(unsigned int));
     switch(flag){
-
         case 1:
             return "linear";
         case 2:
@@ -28,6 +26,6 @@ string getActivation(ifstream *file){
         case 3:
             return "softmax";
         default:
-            assert(false);
+            throw "incorrect flag";
     }
 }

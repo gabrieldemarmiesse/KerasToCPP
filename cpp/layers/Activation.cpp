@@ -30,7 +30,7 @@ void Activation::call(MultiDimArray *in, MultiDimArray *out) {
             out->values[i] = in->values[i];
     }else if (act =="relu"){
         for(int i=0; i<in->values.size(); i++){
-            double value = in->values[i];
+            float value = in->values[i];
             if(value<0){
                 out->values[i] = 0;
             }else{
@@ -39,12 +39,12 @@ void Activation::call(MultiDimArray *in, MultiDimArray *out) {
         }
 
     }else if(act=="softmax"){
-        double sum = 0;
+        float sum = 0;
         for(int i=0; i<in->values.size(); i++){
             out->values[i] = exp(in->values[i]);
             sum += out->values[i];
         }
-        for (double & value : out->values) {
+        for (float & value : out->values) {
             value /= sum;
         }
 

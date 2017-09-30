@@ -15,7 +15,7 @@ vector<myType> readFile(char *path){
 
     is.open(path, std::ios::binary);
     is.seekg(0, std::ios::end);
-    size_t filesize= static_cast<size_t>(is.tellg());
+    size_t filesize= is.tellg();
     is.seekg(0, std::ios::beg);
 
     rawfilebuffer.resize(filesize/sizeof(myType));
@@ -28,7 +28,7 @@ vector<myType> readFile(char *path){
 int main(int argc, char *argv[]) {
 
     assert(CHAR_BIT * sizeof (float) == 32);
-
+    //throw invalid_argument("MyFunc argument too large.");
     if(argc != 3){
         cout << "You didn't specify the right number of arguments" << endl;
         return -1;
@@ -43,26 +43,13 @@ int main(int argc, char *argv[]) {
     for(int i=0; i<buffer.size(); i++){
         input.values[i] = buffer[i];
         input.values[i] /= 255;
-        input.values[i] -= 0.5;
     }
 
-    Model model("yolo");
+    Model model(argv[1]);
     auto pointer = model.predict(&input);
-
-
-
+    for(auto value: pointer->values)
+        cout <<value;
     cout << "yolo";
-    /*for(int j=0; j<input2.shape[1]; j++){
-        for(int i=0; i<input2.shape[2]; i++){
-            if (input2.access(0,j,i)>1000000){
-                cout << "1";
-            }else{
-                cout << input2.access(0,j,i);
-            }
-        }
-        cout << endl;
-    }*/
-
 
     return 0;
 }

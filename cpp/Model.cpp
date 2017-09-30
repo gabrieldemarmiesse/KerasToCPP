@@ -4,6 +4,7 @@
 #include <iostream>
 #include <c++/memory>
 #include <c++/fstream>
+#include <c++/cassert>
 #include "Model.h"
 #include "layers/Activation.h"
 #include "layers/Dense.h"
@@ -27,17 +28,22 @@ Model::Model(string myString) {
         shared_ptr<Layer> layerPtr;
         switch (idLayer){
             case 1:
-                layerPtr = new Dense(&file);
+                layerPtr.reset(new Dense(&file));
+                break;
             case 2:
-                layerPtr = new Conv2D(&file);
+                layerPtr.reset(new Conv2D(&file));
+                break;
             case 3:
-                layerPtr = new Flatten();
+                layerPtr.reset(new Flatten());
+                break;
             case 4:
-                layerPtr = new Activation(&file);
+                layerPtr.reset(new Activation(&file));
+                break;
             case 5:
-                layerPtr = new MaxPooling2D(&file);
-
-            default:break;
+                layerPtr.reset(new MaxPooling2D(&file));
+                break;
+            default:
+                assert(false);
         }
         layers.push_back(layerPtr);
     }
@@ -57,6 +63,7 @@ shared_ptr<MultiDimArray> Model::predict(MultiDimArray *input) {
         }
         shared_ptr<MultiDimArray> pointerOut(new MultiDimArray(layers[i]->getOutputShapeFor(&(raw_ptr->shape))));
         layers[i]->call(raw_ptr, pointerOut.get());
+
         pointerIn = pointerOut;
     }
     return pointerIn;

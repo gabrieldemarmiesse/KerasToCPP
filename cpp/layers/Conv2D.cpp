@@ -7,7 +7,7 @@
 #include <iostream>
 #include <c++/fstream>
 #include <c++/cassert>
-#include "../utils.cpp"
+#include "../utils.h"
 using namespace std;
 
 
@@ -26,25 +26,35 @@ Conv2D::Conv2D(ifstream *file) {
     kernel.reset(new MultiDimArray({kernelDim0, kernelDim1, kernelDim2, kernelDim3}));
     biases.reset(new MultiDimArray({biasDim0}));
 
+    /*double toTest;
+    file->read((char *)&toTest, sizeof(toTest));
+    cout << toTest<<endl;*/
+
     //Now we fill the weights.
-    fillArray<double>(file, &(kernel->values));
-    fillArray<double>(file, &(biases->values));
+    //fillArray<float>(file, &(kernel->values));
+    unsigned long long toRead = kernel->values.size() * sizeof(float);
+    file->read((char *) kernel->values.data(), toRead);
+    cout << kernel->values[0] <<endl;
+    //fillArray<float>(file, &(biases->values));
+    toRead = biases->values.size() * sizeof(float);
+    file->read((char *) biases->values.data(), toRead);
 
     //We get the activation.
     activation = getActivation(file);
+    cout << "created conv" << endl;
 }
 
 
 std::vector<int> Conv2D::getOutputShapeFor(std::vector<int> *inputShape) {
     assert(inputShape->size()==3);
-    assert((*inputShape)[0]==kernel->shape[0]);
-    assert(kernel->shape[1] == biases->shape[0]);
-    assert(kernel->shape[2]%2 == 1); //works only with odd size kernels.
-    assert(kernel->shape[3]%3 == 1); //works only with odd size kernels.
+    assert((*inputShape)[0]==kernel->shape[2]);
+    assert(kernel->shape[3] == biases->shape[0]);
+    assert(kernel->shape[0]%2 == 1); //works only with odd size kernels.
+    assert(kernel->shape[1]%2 == 1); //works only with odd size kernels.
 
 
-    int newHeight = (*inputShape)[1] - (kernel->shape[2]-1);
-    int newWidth = (*inputShape)[2] - (kernel->shape[3]-1);
+    int newHeight = (*inputShape)[1] - (kernel->shape[0]-1);
+    int newWidth = (*inputShape)[2] - (kernel->shape[1]-1);
 
     return std::vector<int>({biases->shape[0],newHeight, newWidth});
 }
@@ -58,11 +68,11 @@ void Conv2D::call(MultiDimArray *in, MultiDimArray *out) {
 
                 /* Now that we know where to put the value we will compute,
                 we just have to iterate through the correct part of the kernel*/
-                double sum = 0;
-                for(int l=0; l<kernel->shape[0];l++){
-                    for(int m=0; m<kernel->shape[2]; m++){
-                        for(int n=0; n<kernel->shape[3];n++){
-                            sum+= (*(in->get(l,j+m,k+n))) * (*(kernel->get(l,i,m,n)));
+                float sum = 0;
+                for(int l=0; l<kernel->shape[2];l++){
+                    for(int m=0; m<kernel->shape[0]; m++){
+                        for(int n=0; n<kernel->shape[1];n++){
+                            sum+= (*(in->get(l,j+m,k+n))) * (*(kernel->get(m,n,l,j)));
                         }
                     }
                 }

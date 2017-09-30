@@ -7,7 +7,7 @@
 #include <c++/fstream>
 #include "Dense.h"
 #include "Activation.h"
-#include "../utils.cpp"
+#include "../utils.h"
 using namespace std;
 
 
@@ -23,8 +23,12 @@ Dense::Dense(ifstream *file) {
     biases.reset(new MultiDimArray({biasDim0}));
 
     //Now we fill the weights.
-    fillArray<double>(file, &(kernel->values));
-    fillArray<double>(file, &(biases->values));
+    //fillArray<float>(file, &(kernel->values));
+    unsigned long long toRead = kernel->values.size() * sizeof(float);
+    file->read((char *) kernel->values.data(), toRead);
+    //fillArray<float>(file, &(biases->values));
+    toRead = biases->values.size() * sizeof(float);
+    file->read((char *) biases->values.data(), toRead);
 
     //We get the activation.
     activation = getActivation(file);
@@ -43,10 +47,10 @@ vector<int> Dense::getOutputShapeFor(vector<int> *inputShape) {
 void Dense::call(MultiDimArray *in, MultiDimArray *out) {
 
     for(int i=0; i<biases->shape[0];i++){
-        double sum=0;
+        float sum=0;
 
-        for(int j=0; j<in->shape[0];i++)
-            sum+= in->values[j] * (*kernel->get(i,j));
+        for(int j=0; j<in->shape[0];j++)
+            sum+= in->values[j] * (*kernel->get(j,i));
 
         sum+=biases->values[i];
         out->values[i]=sum;
