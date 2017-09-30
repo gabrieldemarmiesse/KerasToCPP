@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
-#include <fstream>
+#include <c++/fstream>
+#include <c++/cassert>
 #include "layers/Activation.h"
 #include "Model.h"
 
@@ -25,6 +26,8 @@ vector<myType> readFile(char *path){
 
 
 int main(int argc, char *argv[]) {
+
+    assert(CHAR_BIT * sizeof (float) == 32);
 
     if(argc != 3){
         cout << "You didn't specify the right number of arguments" << endl;

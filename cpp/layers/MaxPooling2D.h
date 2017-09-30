@@ -10,8 +10,11 @@
 
 class MaxPooling2D : public Layer{
 public:
+    explicit MaxPooling2D(std::ifstream *file);
     void call(MultiDimArray *in, MultiDimArray *out) override;
     std::vector<int> getOutputShapeFor(std::vector<int>* inputShape) override;
+
+private:
     int poolSizeH;
     int poolSizeW;
 };

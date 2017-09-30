@@ -11,10 +11,14 @@
 class Conv2D : public Layer{
 
 public:
+    explicit Conv2D(std::ifstream* file);
     void call(MultiDimArray *in, MultiDimArray *out) override;
     std::vector<int> getOutputShapeFor(std::vector<int>* inputShape) override;
-    MultiDimArray kernel; //should be 2D
-    MultiDimArray biases; //should be 1D
+
+private:
+    std::shared_ptr<MultiDimArray> kernel; //should be 2D
+    std::shared_ptr<MultiDimArray> biases; //should be 1D
+    std::string activation;
 };
 
 
