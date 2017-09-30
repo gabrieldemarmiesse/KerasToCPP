@@ -1,11 +1,8 @@
 #include <iostream>
 #include <vector>
-#include <iostream>
 #include <fstream>
+#include "layers/Activation.h"
 #include "Model.h"
-#include "arrays/Array2D.h"
-#include "arrays/Array3D.h"
-#include "arrays/Array4D.h"
 
 
 using myType = uint8_t;
@@ -37,21 +34,31 @@ int main(int argc, char *argv[]) {
     for(int i=0; i<argc; i++)
         cout << argv[i] << endl;
 
-    Array3D input(1, 28,28,false);
+    MultiDimArray input({1,28,28});
 
     auto buffer = readFile(argv[2]);
-    for(int i=0; i<buffer.size(); i++)
+    for(int i=0; i<buffer.size(); i++){
         input.values[i] = buffer[i];
-    for(int j=0; j<input.shape[1]; j++){
-        for(int i=0; i<input.shape[2]; i++){
-            if (input.access(0,j,i)>0){
+        input.values[i] /= 255;
+        input.values[i] -= 0.5;
+    }
+
+    Model model("yolo");
+    auto pointer = model.predict(&input);
+
+
+
+    cout << "yolo";
+    /*for(int j=0; j<input2.shape[1]; j++){
+        for(int i=0; i<input2.shape[2]; i++){
+            if (input2.access(0,j,i)>1000000){
                 cout << "1";
             }else{
-                cout << "0";
+                cout << input2.access(0,j,i);
             }
         }
         cout << endl;
-    }
+    }*/
 
 
     return 0;

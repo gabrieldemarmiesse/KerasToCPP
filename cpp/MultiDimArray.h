@@ -11,13 +11,14 @@
 class MultiDimArray {
 
     public:
-    int nbDims;
-    int size;
-    std::vector<double> values;
 
-    protected:
-    void initialize(bool init);
-    void initSize(const int *shape);
+    explicit MultiDimArray(std::vector<int> dims);
+    std::vector<double> values;
+    std::vector<int> shape;
+    double get(int dim0);
+    double get(int dim0, int dim1);
+    double get(int dim0, int dim1, int dim2);
+    double get(int dim0, int dim1, int dim2, int dim3);
 
 };
 
