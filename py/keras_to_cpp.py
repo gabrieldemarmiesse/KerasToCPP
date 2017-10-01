@@ -17,7 +17,7 @@ def write_floats(file, floats):
 	"""
 	Writes floats to file in 1024 chunks.. prevents memory explosion
 	writing very large arrays to disk when calling struct.pack().
-	"""
+
 	step = 1024
 	written = 0
 
@@ -26,7 +26,12 @@ def write_floats(file, floats):
 		written += remaining
 		file.write(struct.pack('=%sf' % remaining, *floats[i:i + remaining]))
 
-	assert written == len(floats)
+	assert written == len(floats)"""
+	floats.tofile(file)
+	"""for fl in floats:
+		print(fl)
+		file.write(struct.pack('f', fl))
+		assert False"""
 
 
 def export_model(model, filename):
@@ -74,10 +79,6 @@ def export_model(model, filename):
 				biases = layer.get_weights()[1]
 				activation = layer.get_config()['activation']
 
-				# The kernel is accessed in reverse order. To simplify the C side we'll
-				# flip the weight matrix for each kernel.
-				weights = weights[:, :, ::-1, ::-1]
-
 				f.write(struct.pack('I', LAYER_CONVOLUTION2D))
 				f.write(struct.pack('I', weights.shape[0]))
 				f.write(struct.pack('I', weights.shape[1]))
@@ -119,4 +120,4 @@ if __name__ == "__main__":
 	from keras.models import load_model
 
 	model = load_model("../dataTest/keras_model.h5")
-	export_model(model, "../dataTest/cpp_model.h5")
+	export_model(model, "../dataTest/cpp_model.bin")

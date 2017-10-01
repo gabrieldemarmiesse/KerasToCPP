@@ -2,6 +2,7 @@
 #include <vector>
 #include <c++/fstream>
 #include <c++/cassert>
+#include <c++/limits>
 #include "layers/Activation.h"
 #include "Model.h"
 
@@ -28,6 +29,7 @@ vector<myType> readFile(char *path){
 int main(int argc, char *argv[]) {
 
     assert(CHAR_BIT * sizeof (float) == 32);
+    assert(numeric_limits<float>::is_iec559);
     //throw invalid_argument("MyFunc argument too large.");
     if(argc != 3){
         cout << "You didn't specify the right number of arguments" << endl;
@@ -48,7 +50,7 @@ int main(int argc, char *argv[]) {
     Model model(argv[1]);
     auto pointer = model.predict(&input);
     for(auto value: pointer->values)
-        cout <<value;
+        cout <<value<<endl;
     cout << "yolo";
 
     return 0;

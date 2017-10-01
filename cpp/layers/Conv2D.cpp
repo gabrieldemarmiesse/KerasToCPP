@@ -8,8 +8,18 @@
 #include <c++/fstream>
 #include <c++/cassert>
 #include "../utils.h"
+#include <bitset>
 using namespace std;
 
+template<typename T>
+void show_binrep(const T& a)
+{
+    const char* beg = reinterpret_cast<const char*>(&a);
+    const char* end = beg + sizeof(a);
+    while(beg != end)
+        std::cout << std::bitset<CHAR_BIT>(*beg++) << ' ';
+    std::cout << '\n';
+}
 
 Conv2D::Conv2D(ifstream *file) {
     unsigned int tmp;
@@ -26,9 +36,12 @@ Conv2D::Conv2D(ifstream *file) {
     kernel.reset(new MultiDimArray({kernelDim0, kernelDim1, kernelDim2, kernelDim3}));
     biases.reset(new MultiDimArray({biasDim0}));
 
-    /*double toTest;
-    file->read((char *)&toTest, sizeof(toTest));
-    cout << toTest<<endl;*/
+    /*float toTest;
+    //fread((void *)&toTest, sizeof(float), 1,file);
+    bool a =file->read((char *)&toTest, sizeof(float)).gcount()==sizeof(toTest);
+    cout << toTest<<endl;
+    cout << a << endl;
+    show_binrep(toTest);*/
 
     //Now we fill the weights.
     //fillArray<float>(file, &(kernel->values));
@@ -72,7 +85,7 @@ void Conv2D::call(MultiDimArray *in, MultiDimArray *out) {
                 for(int l=0; l<kernel->shape[2];l++){
                     for(int m=0; m<kernel->shape[0]; m++){
                         for(int n=0; n<kernel->shape[1];n++){
-                            sum+= (*(in->get(l,j+m,k+n))) * (*(kernel->get(m,n,l,j)));
+                            sum+= (*(in->get(l,j+m,k+n))) * (*(kernel->get(m,n,l,i)));
                         }
                     }
                 }
@@ -84,4 +97,5 @@ void Conv2D::call(MultiDimArray *in, MultiDimArray *out) {
 
     Activation actLayer(activation);
     actLayer.call(out, out);
+    cout<< "out first conv: " << *(out->get(15,16,14))<<endl;
 }

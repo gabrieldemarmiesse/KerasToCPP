@@ -39,8 +39,8 @@ float* MultiDimArray::get(int dim0, int dim1, int dim2) {
 }
 
 float* MultiDimArray::get(int dim0, int dim1, int dim2, int dim3) {
-    //dim0 = shape[0]-1-dim0;
-    //dim1 = shape[1]-1-dim1;
+    dim0 = shape[0]-1-dim0;
+    dim1 = shape[1]-1-dim1;
     #if defined(CHECK_BOUNDS)
     if(dim0>=shape[0] || dim1>=shape[1] || dim2>=shape[2] || dim3>=shape[3])
         throw std::invalid_argument("MyFunc argument too large.");
