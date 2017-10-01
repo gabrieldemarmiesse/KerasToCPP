@@ -8,13 +8,6 @@
 #include <c++/cassert>
 #include "utils.h"
 
-template <class myType>
-void fillArray(std::ifstream *file, std::vector<myType>* pointer){
-
-    unsigned long long toRead = pointer->size() * sizeof(myType);
-    file->read((char *) &(pointer->data()), toRead);
-}
-
 std::string getActivation(std::ifstream *file){
     unsigned int flag;
     file->read((char *) &flag,sizeof(unsigned int));

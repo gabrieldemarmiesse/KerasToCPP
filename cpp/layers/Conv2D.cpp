@@ -11,16 +11,6 @@
 #include <bitset>
 using namespace std;
 
-template<typename T>
-void show_binrep(const T& a)
-{
-    const char* beg = reinterpret_cast<const char*>(&a);
-    const char* end = beg + sizeof(a);
-    while(beg != end)
-        std::cout << std::bitset<CHAR_BIT>(*beg++) << ' ';
-    std::cout << '\n';
-}
-
 Conv2D::Conv2D(ifstream *file) {
     unsigned int tmp;
     file->read((char *)&tmp, sizeof(unsigned int));
@@ -36,25 +26,13 @@ Conv2D::Conv2D(ifstream *file) {
     kernel.reset(new MultiDimArray({kernelDim0, kernelDim1, kernelDim2, kernelDim3}));
     biases.reset(new MultiDimArray({biasDim0}));
 
-    /*float toTest;
-    //fread((void *)&toTest, sizeof(float), 1,file);
-    bool a =file->read((char *)&toTest, sizeof(float)).gcount()==sizeof(toTest);
-    cout << toTest<<endl;
-    cout << a << endl;
-    show_binrep(toTest);*/
 
     //Now we fill the weights.
-    //fillArray<float>(file, &(kernel->values));
-    unsigned long long toRead = kernel->values.size() * sizeof(float);
-    file->read((char *) kernel->values.data(), toRead);
-    cout << kernel->values[0] <<endl;
-    //fillArray<float>(file, &(biases->values));
-    toRead = biases->values.size() * sizeof(float);
-    file->read((char *) biases->values.data(), toRead);
+    kernel->fillArray(file);
+    biases->fillArray(file);
 
     //We get the activation.
     activation = getActivation(file);
-    cout << "created conv" << endl;
 }
 
 
@@ -64,7 +42,6 @@ std::vector<int> Conv2D::getOutputShapeFor(std::vector<int> *inputShape) {
     assert(kernel->shape[3] == biases->shape[0]);
     assert(kernel->shape[0]%2 == 1); //works only with odd size kernels.
     assert(kernel->shape[1]%2 == 1); //works only with odd size kernels.
-
 
     int newHeight = (*inputShape)[1] - (kernel->shape[0]-1);
     int newWidth = (*inputShape)[2] - (kernel->shape[1]-1);
@@ -97,5 +74,5 @@ void Conv2D::call(MultiDimArray *in, MultiDimArray *out) {
 
     Activation actLayer(activation);
     actLayer.call(out, out);
-    cout<< "out first conv: " << *(out->get(15,16,14))<<endl;
+    //cout<< "out first conv: " << *(out->get(15,16,14))<<endl;
 }

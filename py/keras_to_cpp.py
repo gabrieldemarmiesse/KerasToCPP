@@ -86,6 +86,10 @@ def export_model(model, filename):
 				f.write(struct.pack('I', weights.shape[3]))
 				f.write(struct.pack('I', biases.shape[0]))
 
+				# Kernels must be inverted before being used in C++
+				# Because it uses less computation.
+				weights = weights[::-1, ::-1, :, :]
+
 				weights = weights.flatten()
 				biases = biases.flatten()
 

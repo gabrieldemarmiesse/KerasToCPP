@@ -16,10 +16,14 @@ class MultiDimArray {
     explicit MultiDimArray(std::vector<int> dims);
     std::vector<float> values;
     std::vector<int> shape;
+    void fillArray(std::ifstream *file);
     float* get(int dim0);
     float* get(int dim0, int dim1);
     float* get(int dim0, int dim1, int dim2);
     float* get(int dim0, int dim1, int dim2, int dim3);
+
+    // To check any access issue.
+    void checkBounds(const std::vector<int> &dims);
 };
 
 

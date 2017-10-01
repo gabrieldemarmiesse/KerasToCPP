@@ -14,7 +14,7 @@ Activation::Activation(std::string str) {
 
 
 Activation::Activation(std::ifstream *file) {
-    act = "linear";
+    cout << "Creating an Activation layer from file is not implemented."<< endl;
     assert(false);
 }
 
@@ -49,6 +49,7 @@ void Activation::call(MultiDimArray *in, MultiDimArray *out) {
         }
 
     }else{
-        throw -1;
+        cout<<"Unexpected activation: "<< act<<endl;
+        assert(false);
     }
 }

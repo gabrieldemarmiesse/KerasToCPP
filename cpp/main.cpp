@@ -3,12 +3,15 @@
 #include <c++/fstream>
 #include <c++/cassert>
 #include <c++/limits>
+#include <chrono>
 #include "layers/Activation.h"
 #include "Model.h"
 
 
 using myType = uint8_t;
 using namespace std;
+using Clock = std::chrono::steady_clock;
+using std::chrono::time_point;
 
 vector<myType> readFile(char *path){
     ifstream is;
@@ -28,30 +31,35 @@ vector<myType> readFile(char *path){
 
 int main(int argc, char *argv[]) {
 
-    assert(CHAR_BIT * sizeof (float) == 32);
-    assert(numeric_limits<float>::is_iec559);
-    //throw invalid_argument("MyFunc argument too large.");
-    if(argc != 3){
-        cout << "You didn't specify the right number of arguments" << endl;
-        return -1;
-    }
-    cout << argc << endl;
+    assert(argc == 3);
+
     for(int i=0; i<argc; i++)
         cout << argv[i] << endl;
 
+    //We get the input.
     MultiDimArray input({1,28,28});
-
     auto buffer = readFile(argv[2]);
     for(int i=0; i<buffer.size(); i++){
         input.values[i] = buffer[i];
         input.values[i] /= 255;
     }
 
+    //Prediction
     Model model(argv[1]);
-    auto pointer = model.predict(&input);
-    for(auto value: pointer->values)
-        cout <<value<<endl;
-    cout << "yolo";
+    auto start = chrono::steady_clock::now();
+    auto ptrOutput = model.predict(&input);
+    auto end = chrono::steady_clock::now();
+    auto diff = end - start;
+    cout <<"Executed in "<< chrono::duration <double, nano> (diff).count() << " ns" << endl;
 
+    for(int i=0; i<ptrOutput->shape[0];i++){
+        cout <<"Confidence of this number being ";
+        cout <<i<<": " << *(ptrOutput->get(i))*100<<"%"<<endl;
+    }
+
+    cout << "Program exited properly.";
     return 0;
+
+
+
 }

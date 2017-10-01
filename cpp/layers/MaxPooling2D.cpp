@@ -10,7 +10,6 @@
 using namespace std;
 
 
-
 MaxPooling2D::MaxPooling2D(std::ifstream* file) {
     unsigned int tmp;
     file->read((char *)&tmp, sizeof(unsigned int));

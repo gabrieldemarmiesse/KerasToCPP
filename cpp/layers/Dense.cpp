@@ -23,12 +23,8 @@ Dense::Dense(ifstream *file) {
     biases.reset(new MultiDimArray({biasDim0}));
 
     //Now we fill the weights.
-    //fillArray<float>(file, &(kernel->values));
-    unsigned long long toRead = kernel->values.size() * sizeof(float);
-    file->read((char *) kernel->values.data(), toRead);
-    //fillArray<float>(file, &(biases->values));
-    toRead = biases->values.size() * sizeof(float);
-    file->read((char *) biases->values.data(), toRead);
+    kernel->fillArray(file);
+    biases->fillArray(file);
 
     //We get the activation.
     activation = getActivation(file);
