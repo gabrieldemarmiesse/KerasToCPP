@@ -5,7 +5,6 @@
 #include <iostream>
 #include <vector>
 #include <c++/fstream>
-#include <c++/cassert>
 #include "utils.h"
 
 std::string getActivation(std::ifstream *file){

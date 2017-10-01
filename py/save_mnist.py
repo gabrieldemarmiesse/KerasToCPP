@@ -6,7 +6,8 @@ import matplotlib.pyplot as plt
 
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 
-plt.imshow(x_test[0])
+idx = 0
+plt.imshow(x_test[idx])
 plt.show()
-x_test[0].tofile("../dataTest/seven.bin")
+x_test[idx].tofile("../dataTest/unknown_number.bin")
 print(x_test.dtype)

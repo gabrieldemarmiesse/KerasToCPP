@@ -13,39 +13,19 @@ ACTIVATION_RELU = 2
 ACTIVATION_SOFTMAX = 3
 
 
-def write_floats(file, floats):
-	"""
-	Writes floats to file in 1024 chunks.. prevents memory explosion
-	writing very large arrays to disk when calling struct.pack().
-
-	step = 1024
-	written = 0
-
-	for i in np.arange(0, len(floats), step):
-		remaining = min(len(floats) - i, step)
-		written += remaining
-		file.write(struct.pack('=%sf' % remaining, *floats[i:i + remaining]))
-
-	assert written == len(floats)"""
-	floats.tofile(file)
-	"""for fl in floats:
-		print(fl)
-		file.write(struct.pack('f', fl))
-		assert False"""
+def write_activation(activation, f):
+	if activation == 'linear':
+		f.write(struct.pack('I', ACTIVATION_LINEAR))
+	elif activation == 'relu':
+		f.write(struct.pack('I', ACTIVATION_RELU))
+	elif activation == 'softmax':
+		f.write(struct.pack('I', ACTIVATION_SOFTMAX))
+	else:
+		assert False, "Unsupported activation type: %s" % activation
 
 
 def export_model(model, filename):
 	with open(filename, 'wb') as f:
-
-		def write_activation(activation):
-			if activation == 'linear':
-				f.write(struct.pack('I', ACTIVATION_LINEAR))
-			elif activation == 'relu':
-				f.write(struct.pack('I', ACTIVATION_RELU))
-			elif activation == 'softmax':
-				f.write(struct.pack('I', ACTIVATION_SOFTMAX))
-			else:
-				assert False, "Unsupported activation type: %s" % activation
 
 		model_layers = [l for l in model.layers if type(l).__name__ not in ['Dropout']]
 		num_layers = len(model_layers)
@@ -67,10 +47,10 @@ def export_model(model, filename):
 				weights = weights.flatten()
 				biases = biases.flatten()
 
-				write_floats(f, weights)
-				write_floats(f, biases)
+				weights.tofile(f)
+				biases.tofile(f)
 
-				write_activation(activation)
+				write_activation(activation, f)
 
 			elif layer_type == 'Conv2D':
 				assert layer.padding == 'valid', "Only border_mode=valid is implemented"
@@ -93,10 +73,10 @@ def export_model(model, filename):
 				weights = weights.flatten()
 				biases = biases.flatten()
 
-				write_floats(f, weights)
-				write_floats(f, biases)
+				weights.tofile(f)
+				biases.tofile(f)
 
-				write_activation(activation)
+				write_activation(activation, f)
 
 			elif layer_type == 'Flatten':
 				f.write(struct.pack('I', LAYER_FLATTEN))
@@ -105,7 +85,7 @@ def export_model(model, filename):
 				activation = layer.get_config()['activation']
 
 				f.write(struct.pack('I', LAYER_ACTIVATION))
-				write_activation(activation)
+				write_activation(activation, f)
 
 			elif layer_type == 'MaxPooling2D':
 				assert layer.padding == 'valid', "Only border_mode=valid is implemented"

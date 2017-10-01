@@ -4,7 +4,6 @@
 
 #include "Conv2D.h"
 #include "Activation.h"
-#include <iostream>
 #include <c++/fstream>
 #include <c++/cassert>
 #include "../utils.h"
