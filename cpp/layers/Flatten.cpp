@@ -4,10 +4,11 @@
 
 #include "Flatten.h"
 
-void Flatten::call(MultiDimArray *in, MultiDimArray *out) {
+void Flatten::call(const MultiDimArray &in, MultiDimArray &out) {
 
-    for(int i=0; i<in->values.size();i++){
-        out->values[i] = in->values[i];
+    for(int i=0; i<in.values.size();i++){
+        // Should use get but it would break checks.
+        out.set(in.values[i], i);
     }
 }
 

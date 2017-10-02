@@ -25,32 +25,62 @@ void MultiDimArray::fillArray(std::ifstream *file) {
     file->read((char *) values.data(), toRead);
 }
 
-float* MultiDimArray::get(int dim0) {
+// Getters
+float MultiDimArray::get(int dim0)const {
     #if (CHECK_BOUNDS)
     checkBounds({dim0});
     #endif
-    return &(values[dim0]);
+    return values[dim0];
 }
 
-float* MultiDimArray::get(int dim0, int dim1) {
+float MultiDimArray::get(int dim0, int dim1) const{
     #if (CHECK_BOUNDS)
     checkBounds({dim0, dim1});
     #endif
-    return &(values[dim0*shape[1] + dim1]);
+    return values[dim0*shape[1] + dim1];
 }
 
-float* MultiDimArray::get(int dim0, int dim1, int dim2) {
+float MultiDimArray::get(int dim0, int dim1, int dim2) const{
     #if (CHECK_BOUNDS)
     checkBounds({dim0, dim1, dim2});
     #endif
-    return &(values[dim2 + shape[2]*(dim1 + shape[1]*dim0)]);
+    return values[dim2 + shape[2]*(dim1 + shape[1]*dim0)];
 }
 
-float* MultiDimArray::get(int dim0, int dim1, int dim2, int dim3) {
+float MultiDimArray::get(int dim0, int dim1, int dim2, int dim3) const{
     #if (CHECK_BOUNDS)
     checkBounds({dim0, dim1, dim2, dim3});
     #endif
-    return &(values[dim3 + shape[3]*(dim2 + shape[2]*(dim1 + shape[1]*dim0))]);
+    return values[dim3 + shape[3]*(dim2 + shape[2]*(dim1 + shape[1]*dim0))];
+}
+
+//Setters
+void MultiDimArray::set(float newValue, int dim0) {
+#if (CHECK_BOUNDS)
+    checkBounds({dim0});
+#endif
+    values[dim0] = newValue;
+}
+
+void MultiDimArray::set(float newValue, int dim0, int dim1) {
+#if (CHECK_BOUNDS)
+    checkBounds({dim0, dim1});
+#endif
+    values[dim0*shape[1] + dim1] = newValue;
+}
+
+void MultiDimArray::set(float newValue, int dim0, int dim1, int dim2) {
+#if (CHECK_BOUNDS)
+    checkBounds({dim0, dim1, dim2});
+#endif
+    values[dim2 + shape[2]*(dim1 + shape[1]*dim0)]=newValue;
+}
+
+void MultiDimArray::set(float newValue, int dim0, int dim1, int dim2, int dim3) {
+#if (CHECK_BOUNDS)
+    checkBounds({dim0, dim1, dim2, dim3});
+#endif
+    values[dim3 + shape[3]*(dim2 + shape[2]*(dim1 + shape[1]*dim0))] = newValue;
 }
 
 void MultiDimArray::checkBounds(const std::vector<int> &dims) {

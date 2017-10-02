@@ -13,7 +13,7 @@
 class Layer {
 
     public:
-    virtual void call(MultiDimArray *in, MultiDimArray *out) = 0;
+    virtual void call(const MultiDimArray& in, MultiDimArray& out) = 0;
     virtual std::vector<int> getOutputShapeFor(std::vector<int>* inputShape) = 0;
 
 };

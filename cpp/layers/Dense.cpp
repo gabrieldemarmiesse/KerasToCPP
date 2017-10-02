@@ -40,16 +40,16 @@ vector<int> Dense::getOutputShapeFor(vector<int> *inputShape) {
 }
 
 
-void Dense::call(MultiDimArray *in, MultiDimArray *out) {
+void Dense::call(const MultiDimArray &in, MultiDimArray &out) {
 
     for(int i=0; i<biases->shape[0];i++){
         float sum=0;
 
-        for(int j=0; j<in->shape[0];j++)
-            sum+= in->values[j] * (*kernel->get(j,i));
+        for(int j=0; j<in.shape[0];j++)
+            sum+= in.get(j) * kernel->get(j,i);
 
-        sum+=biases->values[i];
-        out->values[i]=sum;
+        sum+=biases->get(i);
+        out.set(sum,i);
     }
 
     Activation actLayer(activation);

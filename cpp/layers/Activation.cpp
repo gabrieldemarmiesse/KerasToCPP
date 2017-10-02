@@ -24,27 +24,27 @@ std::vector<int> Activation::getOutputShapeFor(std::vector<int> *inputShape) {
 }
 
 
-void Activation::call(MultiDimArray *in, MultiDimArray *out) {
+void Activation::call(const MultiDimArray& in, MultiDimArray& out) {
     if(act == "linear"){
-        for(int i=0; i<in->values.size(); i++)
-            out->values[i] = in->values[i];
+        for(int i=0; i<in.values.size(); i++)
+            out.values[i] = in.values[i];
     }else if (act =="relu"){
-        for(int i=0; i<in->values.size(); i++){
-            float value = in->values[i];
+        for(int i=0; i<in.values.size(); i++){
+            float value = in.values[i];
             if(value<0){
-                out->values[i] = 0;
+                out.values[i] = 0;
             }else{
-                out->values[i] = value;
+                out.values[i] = value;
             }
         }
 
     }else if(act=="softmax"){
         float sum = 0;
-        for(int i=0; i<in->values.size(); i++){
-            out->values[i] = exp(in->values[i]);
-            sum += out->values[i];
+        for(int i=0; i<in.values.size(); i++){
+            out.values[i] = exp(in.values[i]);
+            sum += out.values[i];
         }
-        for (float & value : out->values) {
+        for (float & value : out.values) {
             value /= sum;
         }
 

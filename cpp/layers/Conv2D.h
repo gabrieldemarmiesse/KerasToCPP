@@ -12,7 +12,7 @@ class Conv2D : public Layer{
 
 public:
     explicit Conv2D(std::ifstream* file);
-    void call(MultiDimArray *in, MultiDimArray *out) override;
+    void call(const MultiDimArray& in, MultiDimArray& out) override;
     std::vector<int> getOutputShapeFor(std::vector<int>* inputShape) override;
 
 private:

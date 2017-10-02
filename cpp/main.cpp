@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
 
     for(int i=0; i<ptrOutput->shape[0];i++){
         cout <<"Confidence of this number being ";
-        cout <<i<<": " << *(ptrOutput->get(i))*100<<"%"<<endl;
+        cout <<i<<": " << ptrOutput->get(i)*100<<"%"<<endl;
     }
 
     cout << "Program exited properly.";

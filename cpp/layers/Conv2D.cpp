@@ -49,11 +49,11 @@ std::vector<int> Conv2D::getOutputShapeFor(std::vector<int> *inputShape) {
 }
 
 
-void Conv2D::call(MultiDimArray *in, MultiDimArray *out) {
+void Conv2D::call(const MultiDimArray& in, MultiDimArray& out) {
 
-    for(int i=0; i<out->shape[0];i++){
-        for(int j=0; j<out->shape[1];j++){
-            for(int k=0; k<out->shape[2];k++){
+    for(int i=0; i<out.shape[0];i++){
+        for(int j=0; j<out.shape[1];j++){
+            for(int k=0; k<out.shape[2];k++){
 
                 /* Now that we know where to put the value we will compute,
                 we just have to iterate through the correct part of the kernel*/
@@ -61,12 +61,12 @@ void Conv2D::call(MultiDimArray *in, MultiDimArray *out) {
                 for(int l=0; l<kernel->shape[2];l++){
                     for(int m=0; m<kernel->shape[0]; m++){
                         for(int n=0; n<kernel->shape[1];n++){
-                            sum+= (*(in->get(l,j+m,k+n))) * (*(kernel->get(m,n,l,i)));
+                            sum+= in.get(l,j+m,k+n) * kernel->get(m,n,l,i);
                         }
                     }
                 }
                 sum +=biases->values[i];
-                *(out->get(i,j,k)) = sum;
+                out.set(sum, i,j,k);
             }
         }
     }

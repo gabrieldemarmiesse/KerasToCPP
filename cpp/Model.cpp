@@ -50,7 +50,7 @@ Model::Model(string myString) {
 
 }
 
-shared_ptr<MultiDimArray> Model::predict(MultiDimArray *input) {
+shared_ptr<MultiDimArray> Model::predict(MultiDimArray* input) {
 
     shared_ptr<MultiDimArray> pointerIn;
 
@@ -62,7 +62,7 @@ shared_ptr<MultiDimArray> Model::predict(MultiDimArray *input) {
             raw_ptr = pointerIn.get();
         }
         shared_ptr<MultiDimArray> pointerOut(new MultiDimArray(layers[i]->getOutputShapeFor(&(raw_ptr->shape))));
-        layers[i]->call(raw_ptr, pointerOut.get());
+        layers[i]->call(*raw_ptr, *pointerOut);
 
         pointerIn = pointerOut;
     }

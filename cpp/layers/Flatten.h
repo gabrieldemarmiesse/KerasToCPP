@@ -11,7 +11,7 @@
 class Flatten : public Layer{
 
 public:
-    void call(MultiDimArray *in, MultiDimArray *out) override;
+    void call(const MultiDimArray &in, MultiDimArray &out) override;
     std::vector<int> getOutputShapeFor(std::vector<int>* inputShape) override;
 
 };
